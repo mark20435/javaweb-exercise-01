@@ -1,0 +1,13 @@
+@charset "UTF-8";
+#nickname_in_session{
+	position: fixed;
+  	right:66px;
+  	top:0;
+}
+
+#logout{
+	position: fixed;
+  	right:0;
+  	top:0;
+  	width: 50px;
+}

@@ -9,7 +9,14 @@ public class Member {
 	private String nickname;
 	private Boolean pass;			// 激活記號
 	private Timestamp lastUpdateDate;
+	private Integer role_id;
 	
+	public Integer getRole_id() {
+		return role_id;
+	}
+	public void setRole_id(Integer role_id) {
+		this.role_id = role_id;
+	}
 	public Integer getId() {
 		return id;
 	}

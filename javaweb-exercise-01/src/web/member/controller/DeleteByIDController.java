@@ -3,6 +3,7 @@ package web.member.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +18,10 @@ import web.member.bean.Member;
 import web.member.service.MemberService;
 
 /**
- * Servlet implementation class LoginController
+ * Servlet implementation class DeleteByIDController
  */
-@WebServlet("/member/LoginController")
-public class LoginController extends HttpServlet {
+@WebServlet("/member/DeleteByIDController")
+public class DeleteByIDController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Gson GSON = new GsonBuilder().create();
 	private MemberService ms = new MemberService();
@@ -28,7 +29,7 @@ public class LoginController extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public LoginController() {
+	public DeleteByIDController() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -42,37 +43,20 @@ public class LoginController extends HttpServlet {
 		try {
 			request.setCharacterEncoding("UTF-8");
 			Member member = json2Member(request);
-			member = ms.login(member);
-
-			
-			//轉發一直出錯，放棄使用，改用js跳轉網頁
-//			if (member != null) {
-//				// 使用Session範圍物件
-//				HttpSession session = request.getSession();
-//				// 加入一個共享資料:
-//				session.setAttribute("account", member.getAccount());
-//				session.setAttribute("nickname", member.getNickname());
-//				// 使用重新導向的方式轉發
-//	            response.sendRedirect("html/update.html");
-//			}
-			
+			int insertResult = ms.deleteByID(member.getId().toString());
 
 			// ↓設定回應的資料格式為JSON
 			response.setContentType("application/json; charset=UTF-8");
-			writeJson(response, member);
+			try (PrintWriter pw = response.getWriter()) {
+				pw.print("{\"result\": " + insertResult + "}");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	private void writeJson(HttpServletResponse response, Member member) {
-		try (PrintWriter pw = response.getWriter()) {
-			pw.print(GSON.toJson(member));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
+	
 	private Member json2Member(HttpServletRequest request) {
 		StringBuilder json = new StringBuilder();
 		try (BufferedReader br = request.getReader()) {
@@ -85,4 +69,5 @@ public class LoginController extends HttpServlet {
 		}
 		return GSON.fromJson(json.toString(), Member.class);
 	}
+
 }

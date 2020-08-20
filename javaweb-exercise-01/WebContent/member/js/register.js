@@ -21,7 +21,8 @@ window.onload = function(){
 			body: JSON.stringify({
 				account: account,
 				password: password,
-				nickname: nickname
+				nickname: nickname,
+				role_id: 2,
 			})
 		})
 		.then(resp => resp.json())
@@ -37,6 +38,7 @@ window.onload = function(){
 				alert("帳號已被註冊");
 			}else if(body.result === 1){
 				alert("註冊成功");
+				window.location.href="./login.html";
 			}else{
 				alert("不明原因註冊失敗");
 			}
